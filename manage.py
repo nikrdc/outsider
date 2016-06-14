@@ -1,12 +1,15 @@
 import os
-import secrets
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
-from flask_login import LoginManager
+from flask_login import UserMixin, LoginManager
 from flask_script import Manager, Shell, Server
 from hashids import Hashids
 import sendgrid
+
+import models
+import secrets
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -20,7 +23,8 @@ manager = Manager(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from models import User, Region, Place
+User, Region, Place = models.build_models(db)
+
 
 def make_shell_context():
     return dict(app=app, db=db, User=User, Region=Region, Place=Place)
@@ -33,11 +37,12 @@ login_manager.session_protection = 'strong'
 login_manager.login_view = 'login'
 login_manager.init_app(app)
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-hashids = Hashids(alphabet='abcdefghijklmnopqrstuvwxyz1234567890')
+hashids = Hashids(alphabet='abcdefghijklmnopqrstuvwxyz0123456789')
 sg = sendgrid.SendGridClient(secrets.SENDGRID_USERNAME, secrets.SENDGRID_PASSWORD)
 
 if __name__ == '__main__':
