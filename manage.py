@@ -10,6 +10,7 @@ import sendgrid
 
 import models
 import secrets
+from views import bop
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -31,6 +32,8 @@ def make_shell_context():
 
 manager.add_command('shell', Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
+
+app.register_blueprint(bop.blueprint)
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
