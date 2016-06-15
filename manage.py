@@ -10,7 +10,7 @@ import sendgrid
 
 import models
 import secrets
-from views import bop
+from views import index, region
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -24,16 +24,16 @@ manager = Manager(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-User, Region, Place = models.build_models(db)
-
 
 def make_shell_context():
-    return dict(app=app, db=db, User=User, Region=Region, Place=Place)
+    return dict(app=app, db=db, User=models.User, Region=models.Region, Place=models.Place)
 
 manager.add_command('shell', Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 
-app.register_blueprint(bop.blueprint)
+# Register blueprints
+app.register_blueprint(index.blueprint)
+app.register_blueprint(region.blueprint)
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
