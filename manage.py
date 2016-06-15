@@ -3,30 +3,29 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
-from flask_login import UserMixin, LoginManager
+from flask_login import LoginManager
 from flask_script import Manager, Shell, Server
 from hashids import Hashids
 import sendgrid
 
-import models
+from models import db, User, Region, Place
 import secrets
 from views import index, region
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
-
 app.config['DEBUG'] = False
 app.config['SECRET_KEY'] = secrets.SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 
+db.init_app(app)
+migrate = Migrate(app, models.db)
 manager = Manager(app)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
 
 def make_shell_context():
-    return dict(app=app, db=db, User=models.User, Region=models.Region, Place=models.Place)
+    return dict(app=app, db=db, User=User, Region=Region, Place=Place)
 
 manager.add_command('shell', Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)

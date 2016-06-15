@@ -1,6 +1,8 @@
 from flask_login import UserMixin
+from flask_sqlalchemy import SQLAlchemy
 
-from manage import db
+prices = [5, 13, 19, 27]
+db = SQLAlchemy()
 
 
 class User(UserMixin, db.Model):
@@ -72,7 +74,7 @@ class Region(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     shortname = db.Column(db.String(64), unique=True)
-    timezone = db.Column()
+    #timezone = db.Column()
 
     places = db.relationship('Place', backref='region', lazy='dynamic')
 
@@ -96,5 +98,3 @@ class Place(db.Model):
 
     def __repr__(self):
         return '<Place %r>' % self.name
-
-prices = [5, 13, 19, 27]
