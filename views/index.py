@@ -7,4 +7,4 @@ blueprint = Blueprint('index', __name__)
 
 @blueprint.route('/', methods=['GET'])
 def index():
-    return render_template('index.html', region=region)
+    return render_template('index.html')

@@ -72,6 +72,7 @@ class Region(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     shortname = db.Column(db.String(64), unique=True)
+    timezone = db.Column()
 
     places = db.relationship('Place', backref='region', lazy='dynamic')
 
@@ -88,7 +89,7 @@ class Place(db.Model):
     description = db.Column(db.Text())
     price_index = db.Column(db.SmallInteger())
     time_created = db.Column(db.DateTime)
-    hashid = db.Column(db.String(32))
+    halfhours = db.Column(db.String(336))
 
     region_id = db.Column(db.Integer, db.ForeignKey('regions.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
