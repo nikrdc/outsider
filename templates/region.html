@@ -1,0 +1,14 @@
+The Outsider's Guide to {{ region.name }}
+
+<form method="POST">
+    {{ filter_form.csrf_token }}
+    {{ filter_form.open_now() }}
+    <label>{{ filter_form.price_range0() }}{{ filter_form.price_range0.label }}</label>
+    <label>{{ filter_form.price_range1() }}{{ filter_form.price_range1.label }}</label>
+    <label>{{ filter_form.price_range2() }}{{ filter_form.price_range2.label }}</label>
+    <label>{{ filter_form.price_range3() }}{{ filter_form.price_range3.label }}</label>
+    <label>{{ filter_form.price_range4() }}{{ filter_form.price_range4.label }}</label>
+    {{ filter_form.submit() }}
+</form>
+
+{{ places }}
