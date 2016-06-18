@@ -1,14 +1,30 @@
-The Outsider's Guide to {{ region.name }}
+{% extends "base.html" %}
+{% block title %}The Outsider's Guide{% endblock %}
+{% block body %} 
+	<div id='mapbox' class='mapbox'></div>
+	<script>
+		mapboxgl.accessToken = 'pk.eyJ1IjoibmlrcmRjIiwiYSI6ImNpZ2Q3ZTc5NTE5eXF2Ym04MmV1dm4zdXkifQ.1IdkG_HlPFtLBV8M7pof4A';
+		var map = new mapboxgl.Map({
+		    container: 'mapbox',
+		    style: 'mapbox://styles/nikrdc/cipljr6nn0006aknjbgh5lcw1',
+		    zoom: 8,
+		    center: [{{ region.longitude }}, {{ region.latitude }}]
+		});
+	</script>
 
-<form method="POST">
-    {{ filter_form.csrf_token }}
-    {{ filter_form.open_now() }}
-    <label>{{ filter_form.price_range0() }}{{ filter_form.price_range0.label }}</label>
-    <label>{{ filter_form.price_range1() }}{{ filter_form.price_range1.label }}</label>
-    <label>{{ filter_form.price_range2() }}{{ filter_form.price_range2.label }}</label>
-    <label>{{ filter_form.price_range3() }}{{ filter_form.price_range3.label }}</label>
-    <label>{{ filter_form.price_range4() }}{{ filter_form.price_range4.label }}</label>
-    {{ filter_form.submit() }}
-</form>
+	<div class="container">
+		<div class="hero_title">The Outsider's Guide to {{ region.name }}</div>
 
-{{ places }}
+		<form method="POST" class="filter_bar">
+		    {{ filter_form.csrf_token }}
+		    <div class="opennow">{{ filter_form.open_now() }}{{ filter_form.open_now.label }}</div>
+		    <div class="price priceleft">{{ filter_form.price_range0() }}{{ filter_form.price_range0.label }}</div>
+		    <div class="price">{{ filter_form.price_range1() }}{{ filter_form.price_range1.label }}</div>
+		    <div class="price">{{ filter_form.price_range2() }}{{ filter_form.price_range2.label }}</div>
+		    <div class="price">{{ filter_form.price_range3() }}{{ filter_form.price_range3.label }}</div>
+		    <div class="price priceright">{{ filter_form.price_range4() }}{{ filter_form.price_range4.label }}</div>
+		    {{ filter_form.submit() }}
+		</form>
+	</div>
+
+{% endblock %}

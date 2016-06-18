@@ -1,5 +1,6 @@
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.ext.hybrid import hybrid_method
 
 prices = ['below $5', '$5 to $13', '$13 to $19', '$19 to $27', 'over $27']
 
@@ -76,6 +77,8 @@ class Region(db.Model):
     name = db.Column(db.String(64), unique=True)
     shortname = db.Column(db.String(64), unique=True)
     timezone = db.Column(db.String(32))
+    longitude = db.Column(db.Float)
+    latitude = db.Column(db.Float)
 
     places = db.relationship('Place', backref='region', lazy='dynamic')
 
@@ -96,6 +99,19 @@ class Place(db.Model):
 
     region_id = db.Column(db.Integer, db.ForeignKey('regions.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    @hybrid_method
+    def open_at(self, local_time):
+        index = (local_time.day * 48) + (local_time.hour * 2)
+        minute = local_time.minute
+        if minute > 20:
+            index += 1
+        if minute > 50:
+            index += 1
+        if self.halfhours[index] == '1' and self.halfhours[index+1] == '1':
+            return True
+        else:
+            return False
 
     def __repr__(self):
         return '<Place %r>' % self.name
