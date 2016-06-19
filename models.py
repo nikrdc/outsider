@@ -2,7 +2,7 @@ from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.hybrid import hybrid_method
 
-prices = ['below $5', '$5 to $13', '$13 to $19', '$19 to $27', 'over $27']
+prices = ['Below $5', '$5 to $13', '$13 to $19', '$19 to $27', 'Over $27']
 
 db = SQLAlchemy()
 
@@ -79,6 +79,7 @@ class Region(db.Model):
     timezone = db.Column(db.String(32))
     longitude = db.Column(db.Float)
     latitude = db.Column(db.Float)
+    zoom = db.Column(db.SmallInteger())
 
     places = db.relationship('Place', backref='region', lazy='dynamic')
 

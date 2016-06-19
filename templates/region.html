@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{% block head %}
+	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.css' rel='stylesheet'/>
+{% endblock %}
 {% block title %}The Outsider's Guide{% endblock %}
 {% block body %} 
 	<div id='mapbox' class='mapbox'></div>
@@ -7,7 +11,7 @@
 		var map = new mapboxgl.Map({
 		    container: 'mapbox',
 		    style: 'mapbox://styles/nikrdc/cipljr6nn0006aknjbgh5lcw1',
-		    zoom: 8,
+		    zoom: {{ region.zoom }},
 		    center: [{{ region.longitude }}, {{ region.latitude }}]
 		});
 	</script>
@@ -25,6 +29,20 @@
 		    <div class="price priceright">{{ filter_form.price_range4() }}{{ filter_form.price_range4.label }}</div>
 		    {{ filter_form.submit() }}
 		</form>
+
+		<div class="places">
+	        {% for place in places %}
+	        	<div class="place_card">
+	        		<div class="place_name">{{ place.name }}</div>
+	        		<div class="place_description">{{ place.description }}</div>
+	        		<div class="tags">
+	        			<div class="place_price tag">{{ prices[place.price_index] }}</div>
+	        			<div class="tag">burger</div>
+	        			<div class="tag">casual service</div>
+	        		</div>
+	        	</div>
+	        {% endfor %}
+	    </div>
 	</div>
 
 {% endblock %}
